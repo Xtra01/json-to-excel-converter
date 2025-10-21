@@ -1194,9 +1194,9 @@ export default function JsonToExcelApp() {
                 <div className="text-xs text-blue-800">
                   <strong>💡 Tip:</strong> For {selectedFiles.length} files:
                   {selectedFiles.length > 50 ? (
-                    <span className="ml-2">Use "Single Sheet Export" for best performance with large datasets.</span>
+                    <span className="ml-2">Use &quot;Single Sheet Export&quot; for best performance with large datasets.</span>
                   ) : folders.length > 1 ? (
-                    <span className="ml-2">Use "Folder-Based Export" to maintain your directory structure.</span>
+                    <span className="ml-2">Use &quot;Folder-Based Export&quot; to maintain your directory structure.</span>
                   ) : (
                     <span className="ml-2">All export options are optimized and ready to use.</span>
                   )}
