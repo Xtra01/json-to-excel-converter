@@ -5,20 +5,13 @@
  * For commercial licensing: https://github.com/Xtra01/json-to-excel-converter
  */
 
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
   title: 'JSON to Excel Converter',
   description: 'Convert JSON data to Excel (XLSX) and CSV files with advanced configuration options',
   manifest: '/manifest.json',
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-    maximumScale: 1,
-    userScalable: false,
-  },
-  themeColor: '#3b82f6',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
@@ -27,17 +20,25 @@ export const metadata: Metadata = {
   icons: [
     {
       rel: 'icon',
-      url: '/icon-192.png',
+      url: '/icon-192.svg',
       sizes: '192x192',
-      type: 'image/png',
+      type: 'image/svg+xml',
     },
     {
       rel: 'apple-touch-icon',
-      url: '/icon-192.png',
+      url: '/icon-192.svg',
       sizes: '192x192',
-      type: 'image/png',
+      type: 'image/svg+xml',
     }
   ]
+}
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  themeColor: '#3b82f6',
 }
 
 export default function RootLayout({
@@ -57,6 +58,7 @@ export default function RootLayout({
       </head>
       <body className="min-h-screen bg-gray-50">
         {children}
+        <script src="/pwa-installer.js" async />
         <script
           dangerouslySetInnerHTML={{
             __html: `

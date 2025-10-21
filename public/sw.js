@@ -1,20 +1,38 @@
-const CACHE_NAME = 'json-to-excel-v1.0.0';
-const urlsToCache = [
+const CACHE_NAME = 'json-to-excel-v1.2.0';
+const STATIC_CACHE = 'static-v1.2.0';
+
+// Essential files for PWA
+const ESSENTIAL_FILES = [
   '/',
   '/manifest.json',
-  '/icon-192.png',
-  '/icon-512.png',
-  '/_next/static/css/app/layout.css',
-  '/_next/static/css/app/page.css'
+  '/icon-192.png', 
+  '/icon-512.png'
 ];
 
-// Yükleme olayı
+// Dynamic cache patterns
+const CACHE_PATTERNS = [
+  /\/_next\/static\//,
+  /\.js$/,
+  /\.css$/,
+  /\.woff2?$/
+];
+
+// Install event - Cache essential files
 self.addEventListener('install', function(event) {
+  console.log('🚀 Service Worker installing...');
+  
   event.waitUntil(
-    caches.open(CACHE_NAME)
+    caches.open(STATIC_CACHE)
       .then(function(cache) {
-        console.log('🚀 PWA Cache açıldı');
-        return cache.addAll(urlsToCache);
+        console.log('� Caching essential files');
+        return cache.addAll(ESSENTIAL_FILES);
+      })
+      .then(function() {
+        console.log('✅ Essential files cached');
+        return self.skipWaiting(); // Activate immediately
+      })
+      .catch(function(error) {
+        console.error('❌ Cache failed:', error);
       })
   );
 });

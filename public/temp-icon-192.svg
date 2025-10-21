@@ -1,0 +1,25 @@
+<!-- PNG formatında basit icon için data URL kullanacağız -->
+<svg width="192" height="192" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6"/>
+      <stop offset="100%" style="stop-color:#8b5cf6"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Background rounded rectangle -->
+  <rect width="192" height="192" rx="32" fill="url(#grad)"/>
+  
+  <!-- JSON bracket -->
+  <text x="96" y="115" text-anchor="middle" fill="white" 
+        font-size="48" font-family="monospace" font-weight="bold">{}</text>
+  
+  <!-- Arrow -->
+  <path d="M60 130 L90 140 L60 150" stroke="white" stroke-width="3" fill="none"/>
+  <line x1="90" y1="140" x2="120" y2="140" stroke="white" stroke-width="3"/>
+  <path d="M120 135 L130 140 L120 145" stroke="white" stroke-width="3" fill="none"/>
+  
+  <!-- XLS text -->
+  <text x="96" y="165" text-anchor="middle" fill="white" 
+        font-size="18" font-family="Arial, sans-serif" font-weight="bold">XLS</text>
+</svg>
