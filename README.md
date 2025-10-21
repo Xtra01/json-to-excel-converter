@@ -304,7 +304,7 @@ Bu proje açık kaynak kodlu ve geliştirmeye açıktır. Katkıda bulunmak iste
 
 ## 📝 Lisans
 
-Bu proje MIT lisansı altında lisanslanmıştır. Detaylar için `LICENSE` dosyasına bakın.
+Bu projenin lisans bilgileri için proje sahibi ile iletişime geçin.
 
 ---
 
