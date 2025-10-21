@@ -1,0 +1,21 @@
+# Docker ignore file for JSON to Excel Converter
+node_modules
+npm-debug.log
+Dockerfile
+.dockerignore
+.git
+.gitignore
+.next
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+coverage
+.nyc_output
+.DS_Store
+*.log
+.vscode
+.idea
+README.md
+docker-compose.yml
+.github

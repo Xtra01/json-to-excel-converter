@@ -1,0 +1,48 @@
+# Docker Compose for JSON to Excel Converter
+# PRODUCTION VERSION - NO SENSITIVE DATA
+version: '3.8'
+
+services:
+  json-to-excel:
+    build: .
+    container_name: json-to-excel-app
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - NEXT_TELEMETRY_DISABLED=1
+    volumes:
+      - ./uploads:/app/uploads:rw
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - json-excel-network
+
+  # Nginx reverse proxy for SSL and domain handling
+  nginx:
+    image: nginx:alpine
+    container_name: json-excel-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf.example:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/ssl/certs:ro
+    depends_on:
+      - json-to-excel
+    restart: unless-stopped
+    networks:
+      - json-excel-network
+
+networks:
+  json-excel-network:
+    driver: bridge
+
+volumes:
+  uploads:
+    driver: local
