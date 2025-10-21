@@ -3,6 +3,13 @@
  * Modular, maintainable, and professional implementation
  */
 
+/*
+ * JSON to Excel Converter - Main Application Component
+ * Copyright (C) 2024 Xtra01
+ * Licensed under AGPL v3 - see LICENSE file
+ * For commercial licensing: https://github.com/Xtra01/json-to-excel-converter
+ */
+
 'use client';
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';

@@ -304,7 +304,12 @@ Bu proje açık kaynak kodlu ve geliştirmeye açıktır. Katkıda bulunmak iste
 
 ## 📝 Lisans
 
-Bu projenin lisans bilgileri için proje sahibi ile iletişime geçin.
+Bu proje **AGPL v3** + **Dual License** modeliyle lisanslanmıştır:
+
+- 🆓 **Açık Kaynak**: AGPL v3 (ücretsiz, ama türev eserler de açık kaynak olmalı)
+- 💼 **Ticari Kullanım**: Ayrı ticari lisans gerekli ($299-$1999)
+
+Detaylar için `LICENSE.md` dosyasına bakın.
 
 ---
 

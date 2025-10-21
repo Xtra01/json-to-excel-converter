@@ -1,3 +1,10 @@
+/*
+ * JSON to Excel Converter
+ * Copyright (C) 2024 Xtra01
+ * Licensed under AGPL v3 - see LICENSE file
+ * For commercial licensing: https://github.com/Xtra01/json-to-excel-converter
+ */
+
 import type { Metadata } from 'next'
 import './globals.css'
 
