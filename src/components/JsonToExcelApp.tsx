@@ -37,6 +37,7 @@ import { memoryManager, AsyncProcessor, PerformanceMetrics } from '../utils/perf
 import { downloadCSV, copyToClipboard, CSVGenerator } from '../utils/csvExport';
 import { createProcessor, processFileData, detectOptimalConfig } from '../utils/jsonProcessor';
 import { fileManager, organizeFolders, getFileStatistics } from '../utils/fileManager';
+import { validateFile, FileValidationResult } from '../utils/fileValidator';
 
 // Legacy compatibility
 import { useProcessingWorker } from '../hooks/useProcessingWorker';
@@ -65,6 +66,20 @@ const createPerformanceTracker = (name: string, data?: any) => ({
   complete: (result?: any) => console.log('[PERF_COMPLETE]', name, result),
   error: (error?: any) => console.error('[PERF_ERROR]', name, error)
 });
+
+// Utility function for file size formatting
+const formatFileSize = (bytes: number): string => {
+  const units = ['B', 'KB', 'MB', 'GB'];
+  let size = bytes;
+  let unitIndex = 0;
+
+  while (size >= 1024 && unitIndex < units.length - 1) {
+    size /= 1024;
+    unitIndex++;
+  }
+
+  return `${size.toFixed(1)} ${units[unitIndex]}`;
+};
 
 export default function JsonToExcelApp() {
   // ============= State Management =============
@@ -258,19 +273,97 @@ export default function JsonToExcelApp() {
         current: 0,
         total: fileList.length,
         percentage: 0,
-        message: 'Processing uploaded files...',
+        message: 'Validating uploaded files...',
         timeStarted: Date.now()
       });
 
+      // Enhanced File Validation Phase
+      const validatedFiles: File[] = [];
+      const validationErrors: string[] = [];
+      let validationCurrent = 0;
+
+      for (const file of Array.from(fileList)) {
+        validationCurrent++;
+        setProgress(prev => ({
+          ...prev,
+          current: validationCurrent,
+          total: fileList.length,
+          percentage: Math.round((validationCurrent / fileList.length) * 30), // 30% for validation
+          message: `Validating: ${file.name}`,
+          lastActivity: Date.now()
+        }));
+
+        const validationResult = await validateFile(file);
+        
+        if (validationResult.isValid) {
+          validatedFiles.push(file);
+          console.log('[VALIDATION_SUCCESS]', file.name, validationResult.metadata);
+        } else {
+          const errorMsg = `❌ ${file.name}: ${validationResult.errors.map(e => e.message).join(', ')}`;
+          validationErrors.push(errorMsg);
+          console.error('[VALIDATION_ERROR]', file.name, validationResult.errors);
+        }
+
+        // Log warnings if any
+        if (validationResult.warnings.length > 0) {
+          console.warn('[VALIDATION_WARNING]', file.name, validationResult.warnings);
+        }
+      }
+
+      // Show validation summary if there are errors
+      if (validationErrors.length > 0) {
+        const validCount = validatedFiles.length;
+        const totalCount = fileList.length;
+        const errorSummary = `Validation completed: ${validCount}/${totalCount} files are valid.\n\nErrors:\n${validationErrors.join('\n')}`;
+        
+        if (validCount === 0) {
+          // All files failed validation
+          setProgress({
+            status: ProcessingStatus.ERROR,
+            current: 0,
+            total: 0,
+            percentage: 0,
+            message: 'All files failed validation',
+            timeStarted: Date.now()
+          });
+          alert(errorSummary);
+          return;
+        } else {
+          // Some files are valid, ask user if they want to continue
+          const shouldContinue = confirm(`${errorSummary}\n\nContinue with ${validCount} valid files?`);
+          if (!shouldContinue) {
+            setProgress({
+              status: ProcessingStatus.IDLE,
+              current: 0,
+              total: 0,
+              percentage: 0,
+              message: 'Processing cancelled',
+              timeStarted: Date.now()
+            });
+            return;
+          }
+        }
+      }
+
+      // Process only validated files
+      setProgress(prev => ({
+        ...prev,
+        current: 0,
+        total: validatedFiles.length,
+        percentage: 30, // Validation complete, start processing
+        message: 'Processing validated files...',
+        lastActivity: Date.now()
+      }));
+
       const processedFiles = await fileManager.processFiles(
-        Array.from(fileList),
+        validatedFiles,
         (current, total, currentFile) => {
           console.log('[MULTI_UPLOAD_PROGRESS]', current, '/', total, currentFile);
           setProgress(prev => ({
             ...prev,
             current,
             total,
-            percentage: Math.round((current / total) * 100),
+            percentage: 30 + Math.round(((current / total) * 70)), // 30% + 70% for processing
             message: `Processing: ${currentFile}`,
             lastActivity: Date.now()
           }));
@@ -891,17 +984,52 @@ export default function JsonToExcelApp() {
                         setFiles(newFiles);
                       }}
                       className="w-4 h-4 text-blue-600 rounded"
+                      disabled={!!file.error}
                     />
-                    <div>
+                    <div className="flex-1">
                       <div className="text-sm font-medium text-gray-900">{file.name}</div>
                       <div className="text-xs text-gray-500">📁 {file.folderPath}</div>
+                      
+                      {/* Enhanced File Information */}
+                      {file.metadata && (
+                        <div className="text-xs text-gray-400 mt-1 flex items-center gap-2">
+                          <span>📏 {formatFileSize(file.metadata.fileSize || 0)}</span>
+                          {file.metadata.structure && (
+                            <span>🔗 {file.metadata.structure}</span>
+                          )}
+                          {file.metadata.depth && (
+                            <span>📊 depth: {file.metadata.depth}</span>
+                          )}
+                        </div>
+                      )}
+                      
+                      {/* Validation Warnings */}
+                      {file.warnings && file.warnings.length > 0 && (
+                        <div className="text-xs text-yellow-600 mt-1">
+                          ⚠️ {file.warnings.length} warning(s)
+                          <div className="ml-4">
+                            {file.warnings.slice(0, 2).map((warning, idx) => (
+                              <div key={idx}>• {warning.message}</div>
+                            ))}
+                            {file.warnings.length > 2 && (
+                              <div className="text-yellow-500">+ {file.warnings.length - 2} more...</div>
+                            )}
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
-                  <div className="flex items-center gap-2 text-xs text-gray-500">
+                  <div className="flex items-center gap-2 text-xs">
                     {file.error ? (
-                      <span className="text-red-500">❌ {file.error}</span>
+                      <div className="text-red-500 text-right">
+                        <div className="font-medium">❌ Invalid</div>
+                        <div className="text-xs">{file.error}</div>
+                      </div>
                     ) : (
-                      <span className="text-green-600">✅ {file.rows.length} rows</span>
+                      <div className="text-green-600 text-right">
+                        <div className="font-medium">✅ Valid</div>
+                        <div className="text-xs">{file.rows.length} rows</div>
+                      </div>
                     )}
                   </div>
                 </div>

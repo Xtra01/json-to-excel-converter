@@ -30,7 +30,18 @@ export interface BaseFileData {
     createdDate?: string;
     lastModified?: number;
     type: string;
+    size?: number;
+    structure?: 'array' | 'object' | 'primitive' | 'mixed';
+    depth?: number;
+    recordCount?: number;
+    fields?: string[];
   };
+}
+
+export interface FileValidationWarning {
+  code: string;
+  message: string;
+  suggestion: string;
 }
 
 export interface FileData extends BaseFileData {
@@ -39,6 +50,7 @@ export interface FileData extends BaseFileData {
   originalPath?: string;
   processingTime?: number;
   validationResult?: ValidationResult;
+  warnings?: FileValidationWarning[];
 }
 
 export interface FolderData {
