@@ -7,6 +7,7 @@
 
 import type { Metadata, Viewport } from 'next'
 import './globals.css'
+import PWAManager from '../components/PWAManager'
 
 export const metadata: Metadata = {
   title: 'JSON to Excel Converter',
@@ -57,24 +58,8 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/icon-192.png" />
       </head>
       <body className="min-h-screen bg-gray-50">
+        <PWAManager />
         {children}
-        <script src="/pwa-installer.js" async />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              if ('serviceWorker' in navigator) {
-                window.addEventListener('load', function() {
-                  navigator.serviceWorker.register('/sw.js')
-                    .then(function(registration) {
-                      console.log('✅ SW registration successful: ', registration.scope);
-                    }, function(err) {
-                      console.log('❌ SW registration failed: ', err);
-                    });
-                });
-              }
-            `,
-          }}
-        />
       </body>
     </html>
   )
