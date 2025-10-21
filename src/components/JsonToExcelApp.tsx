@@ -120,8 +120,12 @@ export default function JsonToExcelApp() {
   const orderedRows = selectedFiles.flatMap(f => f.rows);
 
   // ============= Effects =============
+  const initializedRef = useRef(false);
   useEffect(() => {
-    logUserAction('Application initialized');
+    if (!initializedRef.current) {
+      logUserAction('Application initialized');
+      initializedRef.current = true;
+    }
     
     // Setup memory management
     memoryManager.registerCleanupCallback(() => {
@@ -144,11 +148,13 @@ export default function JsonToExcelApp() {
 
   useEffect(() => {
     const allKeys = new Set<string>();
-    orderedRows.forEach(row => {
-      Object.keys(row).forEach(key => allKeys.add(key));
+    selectedFiles.forEach(file => {
+      file.rows.forEach(row => {
+        Object.keys(row).forEach(key => allKeys.add(key));
+      });
     });
     setColumns(Array.from(allKeys));
-  }, [orderedRows]);
+  }, [selectedFiles]);
 
   useEffect(() => {
     const newFolders = organizeFolders(files);

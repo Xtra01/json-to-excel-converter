@@ -121,28 +121,23 @@ class PWAInstaller {
         </div>
       `;
       document.body.appendChild(iosPrompt);
-    }, 3000);
+    }, 1000);
   }
 
   setupAutoPrompt() {
-    let userInteractions = 0;
-    const requiredInteractions = 3;
-
-    const trackInteraction = () => {
-      userInteractions++;
-      if (userInteractions >= requiredInteractions && this.deferredPrompt && !this.isInstalled) {
-        setTimeout(() => {
-          this.showInstallNotification();
-        }, 2000);
-        
-        // Remove listeners after showing prompt
-        document.removeEventListener('click', trackInteraction);
-        document.removeEventListener('scroll', trackInteraction);
+    // Show prompt immediately when available
+    const showPromptWhenReady = () => {
+      if (this.deferredPrompt && !this.isInstalled) {
+        // Show notification immediately 
+        this.showInstallNotification();
       }
     };
 
-    document.addEventListener('click', trackInteraction);
-    document.addEventListener('scroll', trackInteraction);
+    // Check immediately and on any interaction
+    setTimeout(showPromptWhenReady, 500); // Quick delay for page load
+    
+    document.addEventListener('click', showPromptWhenReady, { once: true });
+    document.addEventListener('scroll', showPromptWhenReady, { once: true });
   }
 
   showInstallNotification() {
@@ -168,11 +163,11 @@ class PWAInstaller {
     `;
     document.body.appendChild(notification);
 
-    // Auto-hide after 10 seconds
+    // Auto-hide after 15 seconds
     setTimeout(() => {
       const notif = document.getElementById('install-notification');
       if (notif) notif.remove();
-    }, 10000);
+    }, 15000);
   }
 
   // Check PWA engagement criteria
