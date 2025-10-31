@@ -76,6 +76,12 @@ tunnel-config.yml
 # Raspberry Pi specific
 raspberry-pi-setup/
 deployment-scripts/
+raspberry-pi-backup/home/
+raspberry-pi-backup/etc/
+raspberry-pi-backup/git-backup-test/
+raspberry-pi-backup/__pycache__/
+raspberry-pi-backup/*.db
+raspberry-pi-backup/*.log
 
 # Sensitive configuration files
 nginx.conf
