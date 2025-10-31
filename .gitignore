@@ -82,6 +82,10 @@ raspberry-pi-backup/git-backup-test/
 raspberry-pi-backup/__pycache__/
 raspberry-pi-backup/*.db
 raspberry-pi-backup/*.log
+raspberry-pi-backup/**/node_modules/
+raspberry-pi-backup/**/src/
+raspberry-pi-backup/**/.next/
+raspberry-pi-backup/**/out/
 
 # Sensitive configuration files
 nginx.conf

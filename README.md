@@ -313,33 +313,57 @@ Detaylar için `LICENSE.md` dosyasına bakın.
 
 ---
 
-## � Deployment
+## 📁 Project Structure
+
+```
+json-to-excel-converter/
+├── src/                    # Application source code
+├── public/                 # Static assets
+├── docs/                   # 📚 All documentation
+│   ├── setup-guides/       # Installation & setup
+│   ├── deployment/         # Deployment & config
+│   ├── system-reports/     # System analysis
+│   └── troubleshooting/    # Issue resolution
+├── config/                 # Configuration examples
+├── test-data/              # Sample test files
+└── raspberry-pi-backup/    # Pi automation scripts
+```
+
+**📚 Documentation**: All documentation is now organized in the [`docs/`](docs/) directory. See [`docs/README.md`](docs/README.md) for complete index.
+
+---
+
+## 📞 Deployment
 
 Bu uygulama Docker ile kolayca deploy edilebilir. Detaylı deployment rehberi için:
 
-- 📋 **Deployment Guide**: `DEPLOYMENT_GUIDE.md`
-- 🍓 **Raspberry Pi Setup**: `RASPBERRY_PI_KURULUM_REHBERI.md`
-- 🔐 **Security Guide**: `SECURITY.md`
-- 📖 **Usage Guide**: `KULLANIM_REHBERI.md`
+- 📋 **Deployment Guide**: [`docs/deployment/DEPLOYMENT_GUIDE.md`](docs/deployment/DEPLOYMENT_GUIDE.md)
+- 🍓 **Raspberry Pi Setup**: [`docs/setup-guides/RASPBERRY_PI_KURULUM_REHBERI.md`](docs/setup-guides/RASPBERRY_PI_KURULUM_REHBERI.md)
+- 🔐 **Security Guide**: [`docs/deployment/SECURITY.md`](docs/deployment/SECURITY.md)
+- 📖 **Usage Guide**: [`docs/setup-guides/KULLANIM_REHBERI.md`](docs/setup-guides/KULLANIM_REHBERI.md)
 
 ### Hızlı Başlangıç
 
 ```bash
 # Repository'yi klonlayın
-git clone https://github.com/your-username/json-to-excel-converter.git
+git clone https://github.com/Xtra01/json-to-excel-converter.git
 cd json-to-excel-converter
 
 # Example dosyalarından production config oluşturun
-cp docker-compose.example.yml docker-compose.yml
-cp nginx.conf.example nginx.conf
+cp config/docker-compose.example.yml docker-compose.yml
+cp config/nginx.conf.example nginx.conf
+cp config/.env.example .env
 
 # Ayarları düzenleyin
 nano docker-compose.yml
 nano nginx.conf
+nano .env
 
 # Uygulamayı başlatın
 docker compose up -d
 ```
+
+**🌐 Live Demo**: https://devtestenv.org
 
 ## �📞 Destek
 
