@@ -1,0 +1,369 @@
+#!/usr/bin/env python3
+
+"""
+Multi-Pi Monitor Test Script
+Local test mode without SSH connections
+"""
+
+import json
+import asyncio
+import time
+from datetime import datetime
+from pathlib import Path
+
+# Test configuration
+TEST_CONFIG = {
+    "devices": [
+        {
+            "hostname": "localhost-test",
+            "ip_address": "127.0.0.1",
+            "ssh_user": "test",
+            "ssh_key_path": "~/.ssh/id_rsa",
+            "description": "Local Test Device",
+            "tunnel_url": "http://localhost:3000"
+        }
+    ],
+    "monitoring": {
+        "check_interval": 60,
+        "timeout": 10,
+        "alert_thresholds": {
+            "cpu_usage": 80.0,
+            "memory_usage": 90.0,
+            "disk_usage": 85.0,
+            "temperature": 70.0
+        }
+    },
+    "telegram": {
+        "bot_token": "test_token",
+        "chat_id": "test_chat"
+    }
+}
+
+class LocalPiMonitor:
+    """Local test version of Pi Monitor"""
+    
+    def __init__(self):
+        self.devices = []
+        self.load_test_config()
+    
+    def load_test_config(self):
+        """Load test configuration"""
+        print("📁 Loading test configuration...")
+        
+        # Create mock device
+        class MockDevice:
+            def __init__(self, **kwargs):
+                self.hostname = kwargs.get('hostname', 'test-device')
+                self.ip_address = kwargs.get('ip_address', '127.0.0.1')
+                self.description = kwargs.get('description', 'Test Device')
+                self.status = 'online'
+                self.last_seen = datetime.now()
+                self.uptime = "2 days, 14 hours"
+                self.cpu_usage = 45.2
+                self.memory_usage = 67.8
+                self.disk_usage = 23.1
+                self.temperature = 52.3
+                self.services = {
+                    'cloudflared': 'active',
+                    'docker': 'json-to-excel:running'
+                }
+                self.tunnel_url = kwargs.get('tunnel_url', '')
+        
+        for device_config in TEST_CONFIG['devices']:
+            device = MockDevice(**device_config)
+            self.devices.append(device)
+        
+        print(f"✅ Loaded {len(self.devices)} test devices")
+    
+    def generate_html_dashboard(self):
+        """Generate test dashboard"""
+        print("🌐 Generating test dashboard...")
+        
+        html_template = """
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧪 Multi-Pi Monitor - TEST MODE</title>
+    <style>
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            margin: 0; 
+            padding: 20px; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .header { 
+            background: rgba(255,255,255,0.1); 
+            backdrop-filter: blur(10px);
+            color: white; 
+            padding: 30px; 
+            border-radius: 15px; 
+            margin-bottom: 30px; 
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+        .test-badge {
+            background: #e74c3c;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+        .stats { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+            gap: 20px; 
+            margin-bottom: 30px; 
+        }
+        .stat-card { 
+            background: rgba(255,255,255,0.9); 
+            padding: 25px; 
+            border-radius: 15px; 
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1); 
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+        .stat-card h3 {
+            margin: 0 0 10px 0;
+            color: #2c3e50;
+            font-size: 16px;
+        }
+        .stat-card h2 {
+            margin: 0;
+            color: #27ae60;
+            font-size: 32px;
+            font-weight: bold;
+        }
+        .devices { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); 
+            gap: 25px; 
+        }
+        .device-card { 
+            background: rgba(255,255,255,0.95); 
+            border-radius: 15px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease;
+        }
+        .device-card:hover {
+            transform: translateY(-5px);
+        }
+        .device-header { 
+            padding: 20px 25px; 
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            color: white;
+        }
+        .device-header h3 {
+            margin: 0;
+            font-size: 20px;
+        }
+        .device-body { 
+            padding: 25px; 
+        }
+        .status-online { 
+            color: #27ae60; 
+            font-weight: bold;
+            background: rgba(39, 174, 96, 0.1);
+            padding: 3px 8px;
+            border-radius: 5px;
+        }
+        .metric { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            margin: 15px 0; 
+            padding: 10px 0;
+            border-bottom: 1px solid #ecf0f1;
+        }
+        .metric:last-child {
+            border-bottom: none;
+        }
+        .metric-label {
+            font-weight: 500;
+            color: #2c3e50;
+        }
+        .metric-value {
+            font-weight: bold;
+            color: #27ae60;
+        }
+        .progress-bar { 
+            width: 100%; 
+            height: 10px; 
+            background: #ecf0f1; 
+            border-radius: 5px; 
+            overflow: hidden; 
+            margin: 8px 0; 
+        }
+        .progress-fill { 
+            height: 100%; 
+            transition: width 0.5s ease;
+            border-radius: 5px;
+        }
+        .progress-normal { background: linear-gradient(90deg, #27ae60, #2ecc71); }
+        .progress-warning { background: linear-gradient(90deg, #f39c12, #e67e22); }
+        .progress-danger { background: linear-gradient(90deg, #e74c3c, #c0392b); }
+        .last-updated { 
+            text-align: center; 
+            color: rgba(255,255,255,0.8); 
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+        .test-info {
+            background: rgba(52, 152, 219, 0.1);
+            border: 2px solid #3498db;
+            color: #2c3e50;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .emoji {
+            font-size: 1.2em;
+            margin-right: 8px;
+        }
+    </style>
+    <meta http-equiv="refresh" content="30">
+</head>
+<body>
+    <div class="header">
+        <div class="test-badge">🧪 TEST MODE</div>
+        <h1>🍓 Multi-Pi Management Dashboard</h1>
+        <p>Centralized monitoring for Raspberry Pi devices</p>
+    </div>
+    
+    <div class="test-info">
+        <strong>🧪 Test Mode Active:</strong> This is a local test of the dashboard system. 
+        In production, this would connect to real Raspberry Pi devices via SSH.
+    </div>
+    
+    <div class="stats">
+        <div class="stat-card">
+            <h3>📟 Online Devices</h3>
+            <h2>1/1</h2>
+        </div>
+        <div class="stat-card">
+            <h3>🔥 Average CPU</h3>
+            <h2>45.2%</h2>
+        </div>
+        <div class="stat-card">
+            <h3>🧠 Average Memory</h3>
+            <h2>67.8%</h2>
+        </div>
+        <div class="stat-card">
+            <h3>💚 System Health</h3>
+            <h2>Excellent</h2>
+        </div>
+    </div>
+    
+    <div class="devices">
+        <div class="device-card">
+            <div class="device-header">
+                <h3><span class="emoji">🖥️</span>localhost-test <span class="status-online">ONLINE</span></h3>
+                <p>Local Test Device</p>
+            </div>
+            <div class="device-body">
+                <div class="metric">
+                    <span class="metric-label">🌐 IP Address:</span>
+                    <span class="metric-value">127.0.0.1</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">⏱️ Uptime:</span>
+                    <span class="metric-value">2 days, 14 hours</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">🔥 CPU Usage:</span>
+                    <span class="metric-value">45.2%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill progress-normal" style="width: 45.2%"></div>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">🧠 Memory Usage:</span>
+                    <span class="metric-value">67.8%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill progress-normal" style="width: 67.8%"></div>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">💾 Disk Usage:</span>
+                    <span class="metric-value">23.1%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill progress-normal" style="width: 23.1%"></div>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">🌡️ Temperature:</span>
+                    <span class="metric-value">52.3°C</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">🔧 Services:</span>
+                    <span class="metric-value">cloudflared: active, docker: running</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">👁️ Last Seen:</span>
+                    <span class="metric-value">{timestamp}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="last-updated">
+        <strong>🕒 Last updated:</strong> {timestamp}<br>
+        <em>🧪 Running in test mode - No real SSH connections</em>
+    </div>
+</body>
+</html>
+        """
+        
+        timestamp = datetime.now().strftime("%H:%M:%S")
+        return html_template.replace("{timestamp}", timestamp)
+    
+    async def run_test(self):
+        """Run test monitoring cycle"""
+        print("🚀 Starting Multi-Pi Monitor test...")
+        print("=" * 50)
+        
+        # Generate test dashboard
+        html_content = self.generate_html_dashboard()
+        
+        # Save dashboard
+        dashboard_path = Path("test-dashboard.html")
+        dashboard_path.write_text(html_content, encoding='utf-8')
+        
+        print(f"✅ Test dashboard generated: {dashboard_path.absolute()}")
+        print(f"🌐 Open in browser: file://{dashboard_path.absolute()}")
+        print("📊 Dashboard features:")
+        print("   - Real-time metrics simulation")
+        print("   - Responsive design")
+        print("   - Progress bars and indicators")
+        print("   - Auto-refresh every 30 seconds")
+        
+        # Test JSON config
+        config_path = Path("test-pi-config.json")
+        config_path.write_text(json.dumps(TEST_CONFIG, indent=2), encoding='utf-8')
+        print(f"⚙️ Test config saved: {config_path.absolute()}")
+        
+        print("\n🎉 Multi-Pi Monitor test completed successfully!")
+        print("💡 To run with real Pi devices:")
+        print("   1. Update pi_config.json with real Pi IPs")
+        print("   2. Setup SSH keys: ssh-copy-id user@pi-ip")
+        print("   3. Run: python multi-pi-monitor.py")
+
+async def main():
+    """Main test function"""
+    monitor = LocalPiMonitor()
+    await monitor.run_test()
+
+if __name__ == "__main__":
+    print("🧪 Multi-Pi Monitor - Local Test Mode")
+    print("====================================")
+    asyncio.run(main())
