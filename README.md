@@ -1,302 +1,601 @@
-# JSON to Excel Converter 📊
+# JSON to Excel Converter 📊# JSON to Excel Converter 📊
 
-**Profesyonel JSON verilerini Excel ve CSV formatlarına dönüştüren güçlü web uygulaması**
 
----
 
-## 🚀 Ne İşe Yarar?
+**Professional JSON to Excel/CSV converter with bulk processing and advanced features****Profesyonel JSON verilerini Excel ve CSV formatlarına dönüştüren güçlü web uygulaması**
+
+
+
+[![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)---
+
+[![Next.js](https://img.shields.io/badge/Next.js-14.2-black)](https://nextjs.org/)
+
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)](https://www.typescriptlang.org/)## 🚀 Ne İşe Yarar?
+
+[![Deployed](https://img.shields.io/badge/Live-json2excel.devtestenv.org-green)](https://json2excel.devtestenv.org)
 
 Bu uygulama JSON formatındaki verilerinizi hızlı ve etkili bir şekilde Excel (XLSX) ve CSV dosyalarına dönüştürür. Özellikle büyük veri setleri ve karmaşık JSON yapıları ile çalışırken işinizi kolaylaştıran gelişmiş özellikler sunar.
 
+> **Transform JSON data into Excel/CSV with ease. Process hundreds of files simultaneously with enterprise-grade features.**
+
 ### ✨ Ana Özellikler
 
-- **🗂️ Toplu Dosya İşleme**: Aynı anda yüzlerce JSON dosyasını işleyebilir
-- **📁 Klasör Desteği**: Tüm klasör yapısını koruyarak dosyaları organize eder
-- **⚙️ Gelişmiş Yapılandırma**: JSON'un nasıl düzleştirileceğini kontrol edebilirsiniz
-- **🔄 Array İşleme Modları**: Dizileri istediğiniz şekilde işleyebilirsiniz
-- **📈 Gerçek Zamanlı İlerleme**: İşlem sırasında detaylı ilerleme takibi
-- **💾 Çoklu Export Seçenekleri**: Excel, CSV ve panoya kopyalama desteği
-- **🎯 Akıllı Performans**: Büyük dosyalar için optimize edilmiş işleme
-
 ---
 
-## 🎯 Hızlı Başlangıç
+- **🗂️ Toplu Dosya İşleme**: Aynı anda yüzlerce JSON dosyasını işleyebilir
 
-### 1. Dosya Yükleme
+## ✨ Key Features- **📁 Klasör Desteği**: Tüm klasör yapısını koruyarak dosyaları organize eder
+
+- **⚙️ Gelişmiş Yapılandırma**: JSON'un nasıl düzleştirileceğini kontrol edebilirsiniz
+
+- **📁 Bulk Processing** - Handle 90+ JSON files at once- **🔄 Array İşleme Modları**: Dizileri istediğiniz şekilde işleyebilirsiniz
+
+- **🗂️ Folder Support** - Upload entire directories with structure preservation  - **📈 Gerçek Zamanlı İlerleme**: İşlem sırasında detaylı ilerleme takibi
+
+- **⚙️ Advanced Configuration** - Control flattening, array handling, and more- **💾 Çoklu Export Seçenekleri**: Excel, CSV ve panoya kopyalama desteği
+
+- **💾 Multiple Formats** - Export to XLSX, CSV, or clipboard- **🎯 Akıllı Performans**: Büyük dosyalar için optimize edilmiş işleme
+
+- **🎯 Memory Optimized** - Smart memory management for large datasets
+
+- **🔒 100% Private** - All processing happens in your browser---
+
+- **📊 Real-time Preview** - See results before exporting
+
+- **🔍 Enterprise Logging** - Comprehensive error tracking## 🎯 Hızlı Başlangıç
+
+
+
+---### 1. Dosya Yükleme
+
 Uygulamayı açtığınızda karşınıza çıkan ana ekranda iki seçenek var:
 
+## 🚀 Quick Start
+
 #### 📁 **Çoklu Dosya Seçimi**
-- Sol taraftaki "Multiple Files" butonuna tıklayın
+
+### Local Development- Sol taraftaki "Multiple Files" butonuna tıklayın
+
 - JSON veya TXT dosyalarınızı seçin (Ctrl+Click ile çoklu seçim)
-- Dosyalar otomatik olarak işlenecek
 
-#### 🗂️ **Klasör Yükleme**  
+```bash- Dosyalar otomatik olarak işlenecek
+
+# Install dependencies
+
+npm install#### 🗂️ **Klasör Yükleme**  
+
 - Sağ taraftaki "Upload Folders" butonuna tıklayın
-- Tüm klasör yapısını seçin
-- Alt klasörler dahil tüm JSON dosyaları işlenecek
 
-### 2. Ayarlar Yapılandırması
-Dosyalarınız yüklendikten sonra "Settings" bölümünde:
+# Run development server  - Tüm klasör yapısını seçin
 
-#### **Delimiter (Ayırıcı)**
+npm run dev- Alt klasörler dahil tüm JSON dosyaları işlenecek
+
+
+
+# Open http://localhost:3000### 2. Ayarlar Yapılandırması
+
+```Dosyalarınız yüklendikten sonra "Settings" bölümünde:
+
+
+
+### Production Build#### **Delimiter (Ayırıcı)**
+
 - JSON'daki iç içe alanları nasıl ayıracağını belirler
-- Örnek: `user.profile.name` → `user_profile_name` 
-- **Varsayılan**: `_` (alt çizgi)
+
+```bash- Örnek: `user.profile.name` → `user_profile_name` 
+
+# Build static export- **Varsayılan**: `_` (alt çizgi)
+
+npm run build
 
 #### **Max Depth (Maksimum Derinlik)**
-- JSON'da kaç seviye derine ineceğini belirler
-- **Varsayılan**: `10` seviye
+
+# Files generated in /out directory- JSON'da kaç seviye derine ineceğini belirler
+
+```- **Varsayılan**: `10` seviye
+
 - **Önerilen**: Karmaşık JSON'lar için 15, basit yapılar için 5
 
+### Deployment to Raspberry Pi
+
 #### **Array Mode (Dizi İşleme Modu)**
-- **Explode**: Her dizi elemanı ayrı sütun olur (`item_0`, `item_1`, ...)
-- **Join**: Tüm elemanlar tek sütunda birleşir (`"item1; item2; item3"`)  
-- **First**: Sadece ilk eleman alınır
 
-#### **Sheet Name (Sayfa Adı)**
-- Excel'de oluşturulacak sayfa adını belirler
-- **Varsayılan**: `data`
+```bash- **Explode**: Her dizi elemanı ayrı sütun olur (`item_0`, `item_1`, ...)
 
----
+# Copy build to Pi- **Join**: Tüm elemanlar tek sütunda birleşir (`"item1; item2; item3"`)  
 
-## 📊 Export Seçenekleri
+scp -r out/* user@pi:/home/user/json-to-excel/out/- **First**: Sadece ilk eleman alınır
 
-### 🔵 **Single Sheet Export** (Tek Sayfa)
+
+
+# Restart container#### **Sheet Name (Sayfa Adı)**
+
+ssh user@pi "docker restart json2excel-static"- Excel'de oluşturulacak sayfa adını belirler
+
+```- **Varsayılan**: `data`
+
+
+
+------
+
+
+
+## 📖 Usage## 📊 Export Seçenekleri
+
+
+
+### 1. Upload Files### 🔵 **Single Sheet Export** (Tek Sayfa)
+
 - Tüm verileri tek Excel sayfasında birleştirir
-- Kaynak dosya bilgilerini otomatik ekler
-- **En uygun**: 50+ dosya için
 
-### 🟢 **Folder-Based Export** (Klasör Bazlı)
+**Option A: Multiple Files**- Kaynak dosya bilgilerini otomatik ekler
+
+1. Click "📁 Multiple Files"- **En uygun**: 50+ dosya için
+
+2. Select JSON/TXT files (Ctrl+Click for multiple)
+
+3. Files auto-process### 🟢 **Folder-Based Export** (Klasör Bazlı)
+
 - Her klasör için ayrı Excel dosyası oluşturur
-- Orijinal klasör yapısını korur
-- **En uygun**: Organize edilmiş veriler için
 
-### 🟡 **CSV Export**
+**Option B: Folder Upload**- Orijinal klasör yapısını korur
+
+1. Click "🗂️ Upload Folders"  - **En uygun**: Organize edilmiş veriler için
+
+2. Select entire folder
+
+3. All JSON files processed recursively### 🟡 **CSV Export**
+
 - Hafif ve hızlı dışa aktarım
-- Tüm tablo uygulamalarında açılabilir
+
+### 2. Configure (Optional)- Tüm tablo uygulamalarında açılabilir
+
 - **En uygun**: Veri analizi için
 
-### 🟣 **Copy to Clipboard** (Panoya Kopyala)
-- Verileri doğrudan Excel'e yapıştırabilirsiniz
-- Tab ile ayrılmış format
-- **En uygun**: Hızlı veri transferi için
+- **Delimiter**: Separator for nested fields (default: `_`)
+
+- **Max Depth**: Nesting levels to process (default: `10`)### 🟣 **Copy to Clipboard** (Panoya Kopyala)
+
+- **Array Mode**:- Verileri doğrudan Excel'e yapıştırabilirsiniz
+
+  - `explode` - Each element becomes a column- Tab ile ayrılmış format
+
+  - `join` - All elements in one column- **En uygun**: Hızlı veri transferi için
+
+  - `first` - Only first element
 
 ---
+
+### 3. Export
 
 ## 🛠️ Arayüz Rehberi
 
-### 📋 **Ana Kontroller**
+Choose your format:
 
-#### **Dosya Listesi**
-- ✅ **Yeşil tik**: Başarıyla işlenen dosya (satır sayısı gösterir)
+- **📄 Single Sheet** - All data in one Excel file### 📋 **Ana Kontroller**
+
+- **📦 Folder-Based** - Separate files per folder
+
+- **📋 CSV** - Lightweight export#### **Dosya Listesi**
+
+- **📎 Clipboard** - Copy & paste to Excel- ✅ **Yeşil tik**: Başarıyla işlenen dosya (satır sayısı gösterir)
+
 - ❌ **Kırmızı X**: Hatalı dosya (hata mesajını gösterir)
-- 📁 **Klasör yolu**: Dosyanın hangi klasörden geldiğini gösterir
+
+---- 📁 **Klasör yolu**: Dosyanın hangi klasörden geldiğini gösterir
+
 - ☑️ **Checkbox**: Export'a dahil edilip edilmeyeceğini belirler
 
+## 📦 Project Structure
+
 #### **İlerleme Çubuğu**
-İşlem sırasında gösterilen bilgiler:
-- **Durum**: Processing/Completed/Error
-- **İlerleme**: Kaç dosyanın işlendiği (ör: 15/50)
-- **Mesaj**: Şu anda ne yapıldığı
-- **Reset Butonu**: İşlemi iptal etme (kırmızı)
 
-#### **Debug Panel** (Geliştirici Modu)
-"Show Debug" butonuna tıklayarak:
-- **Memory**: Bellek kullanımı
-- **Files**: Toplam dosya sayısı  
-- **Status**: Sistem durumu
-- **Mode**: İşleme modu
-- **Export Logs**: Log dosyasını indir
-- **Clear Metrics**: Performans verilerini temizle
+```İşlem sırasında gösterilen bilgiler:
 
----
+Project4/- **Durum**: Processing/Completed/Error
 
-## 📁 Örnek Kullanım Senaryoları
+├── src/- **İlerleme**: Kaç dosyanın işlendiği (ör: 15/50)
 
-### 🏢 **E-ticaret Verileri**
+│   ├── components/         # React components- **Mesaj**: Şu anda ne yapıldığı
+
+│   ├── types/             # TypeScript definitions- **Reset Butonu**: İşlemi iptal etme (kırmızı)
+
+│   ├── utils/             # Helper functions
+
+│   └── workers/           # Web Workers#### **Debug Panel** (Geliştirici Modu)
+
+├── deployment/"Show Debug" butonuna tıklayarak:
+
+│   ├── scraper/           # Server deployment configs- **Memory**: Bellek kullanımı
+
+│   └── landing-page/      # Landing page files- **Files**: Toplam dosya sayısı  
+
+├── scripts/- **Status**: Sistem durumu
+
+│   └── analyze_logs.ps1   # Log analysis tool- **Mode**: İşleme modu
+
+├── docs/- **Export Logs**: Log dosyasını indir
+
+│   └── LOG_MANAGEMENT_GUIDE.md- **Clear Metrics**: Performans verilerini temizle
+
+└── test-data/             # Sample JSON files
+
+```---
+
+
+
+---## 📁 Örnek Kullanım Senaryoları
+
+
+
+## 🔧 Configuration### 🏢 **E-ticaret Verileri**
+
 ```json
-// products.json
-{
-  "product_id": "P001",
-  "name": "Laptop",
-  "specs": {
-    "cpu": "Intel i7",
-    "ram": "16GB"
-  }
-}
-```
-**Sonuç Excel**: `product_id | name | specs_cpu | specs_ram`
 
-### 👥 **Kullanıcı Profilleri**  
+### Processing Config// products.json
+
+{
+
+```typescript  "product_id": "P001",
+
+{  "name": "Laptop",
+
+  delimiter: '_',           // Field separator  "specs": {
+
+  maxDepth: 10,            // Max nesting depth    "cpu": "Intel i7",
+
+  arrayMode: 'explode',    // 'explode' | 'join' | 'first'    "ram": "16GB"
+
+  batchSize: 100,          // Files per batch  }
+
+  maxFileSize: 10485760    // 10MB max per file}
+
+}```
+
+```**Sonuç Excel**: `product_id | name | specs_cpu | specs_ram`
+
+
+
+### Docker Deployment### 👥 **Kullanıcı Profilleri**  
+
 ```json
-// users.json
-{
-  "name": "John Doe",
-  "profile": {
-    "age": 30,
-    "interests": ["coding", "music"]
-  }
-}
-```
-**Array Mode=Join**: `interests` → `"coding; music"`  
-**Array Mode=Explode**: `interests_0` → `"coding"`, `interests_1` → `"music"`
 
-### 🗂️ **Klasör Yapısı**
-```
-data/
-├── 2023/
-│   ├── january.json
+```yaml// users.json
+
+version: '3.8'{
+
+services:  "name": "John Doe",
+
+  json2excel:  "profile": {
+
+    image: nginx:alpine    "age": 30,
+
+    container_name: json2excel-static    "interests": ["coding", "music"]
+
+    ports:  }
+
+      - "8091:80"}
+
+    volumes:```
+
+      - ./out:/usr/share/nginx/html:ro**Array Mode=Join**: `interests` → `"coding; music"`  
+
+    restart: unless-stopped**Array Mode=Explode**: `interests_0` → `"coding"`, `interests_1` → `"music"`
+
+    logging:
+
+      driver: "json-file"### 🗂️ **Klasör Yapısı**
+
+      options:```
+
+        max-size: "10m"data/
+
+        max-file: "3"├── 2023/
+
+```│   ├── january.json
+
 │   └── february.json
-└── 2024/
+
+---└── 2024/
+
     ├── march.json
-    └── april.json
+
+## 📊 Example    └── april.json
+
 ```
-**Folder-Based Export**: `folder_2023.xlsx`, `folder_2024.xlsx` dosyaları oluşur
+
+### Input JSON**Folder-Based Export**: `folder_2023.xlsx`, `folder_2024.xlsx` dosyaları oluşur
+
+
+
+```json---
+
+[
+
+  {## ⚡ Performans İpuçları
+
+    "id": 1,
+
+    "name": "Product A",### 🎯 **Büyük Dosyalar İçin**
+
+    "price": 99.99,- **Single Sheet Export** kullanın
+
+    "tags": ["electronics", "sale"],- **Max Depth**'i düşük tutun (5-8)
+
+    "details": {- **Array Mode**'u "Join" olarak ayarlayın
+
+      "weight": "1.5kg",- Debug panel'den bellek kullanımını takip edin
+
+      "color": "black"
+
+    }### 🚀 **Hızlı İşleme İçin**
+
+  }- Gereksiz dosyaları seçimden çıkarın
+
+]- Karmaşık JSON yapıları için **Delimiter**'ı `_` olarak kullanın
+
+```- CSV export'u Excel export'undan daha hızlıdır
+
+
+
+### Output Excel### 💾 **Bellek Yönetimi**
+
+- Uygulama otomatik olarak belleği optimize eder
+
+| id | name | price | tags_0 | tags_1 | details_weight | details_color |- 50MB+ dosyalar için batch işleme devreye girer
+
+|----|------|-------|--------|--------|----------------|---------------|- Tarayıcı belleği dolduğunda otomatik temizlik yapılır
+
+| 1 | Product A | 99.99 | electronics | sale | 1.5kg | black |
 
 ---
-
-## ⚡ Performans İpuçları
-
-### 🎯 **Büyük Dosyalar İçin**
-- **Single Sheet Export** kullanın
-- **Max Depth**'i düşük tutun (5-8)
-- **Array Mode**'u "Join" olarak ayarlayın
-- Debug panel'den bellek kullanımını takip edin
-
-### 🚀 **Hızlı İşleme İçin**
-- Gereksiz dosyaları seçimden çıkarın
-- Karmaşık JSON yapıları için **Delimiter**'ı `_` olarak kullanın
-- CSV export'u Excel export'undan daha hızlıdır
-
-### 💾 **Bellek Yönetimi**
-- Uygulama otomatik olarak belleği optimize eder
-- 50MB+ dosyalar için batch işleme devreye girer
-- Tarayıcı belleği dolduğunda otomatik temizlik yapılır
 
 ---
 
 ## 🔧 Teknik Özellikler
 
+## 🔒 Security & Privacy
+
 ### 🏗️ **Teknoloji Stack**
-- **Frontend**: Next.js 14 + TypeScript
-- **Styling**: Tailwind CSS
-- **Excel**: xlsx kütüphanesi
-- **Export**: Özel CSV generator
 
-### 📊 **Desteklenen Formatlar**
+- ✅ **100% Client-Side** - No data sent to servers- **Frontend**: Next.js 14 + TypeScript
+
+- ✅ **No Tracking** - Zero analytics or tracking- **Styling**: Tailwind CSS
+
+- ✅ **Local Processing** - Everything in your browser- **Excel**: xlsx kütüphanesi
+
+- ✅ **No Storage** - Files never saved on server- **Export**: Özel CSV generator
+
+
+
+---### 📊 **Desteklenen Formatlar**
+
 - **Giriş**: JSON (.json), Text (.txt)
-- **Çıkış**: Excel (.xlsx), CSV (.csv), Clipboard
 
-### ⚙️ **Gelişmiş Özellikler**
+## 📝 Logging & Monitoring- **Çıkış**: Excel (.xlsx), CSV (.csv), Clipboard
+
+
+
+### Application Logs### ⚙️ **Gelişmiş Özellikler**
+
 - Web Workers ile arka plan işleme
-- Adaptif bellek yönetimi
-- Hata yakalama ve kurtarma
-- Performans izleme
-- Otomatik veri validasyonu
+
+Built-in enterprise logging:- Adaptif bellek yönetimi
+
+- Console logs for debugging- Hata yakalama ve kurtarma
+
+- Performance metrics (memory, time, file counts)- Performans izleme
+
+- Error tracking with stack traces- Otomatik veri validasyonu
+
+- User action tracking
 
 ---
+
+### Server Logs (Raspberry Pi)
 
 ## 🐛 Sorun Giderme
 
-### ❗ **Yaygın Hatalar**
+**Automatic Log Rotation:**
 
-#### **"Processing failed" Hatası**
-- JSON formatınızı kontrol edin
+```bash### ❗ **Yaygın Hatalar**
+
+# Runs daily at 2 AM via cron
+
+0 2 * * * /opt/scraper/scripts/master_log_rotation.sh#### **"Processing failed" Hatası**
+
+```- JSON formatınızı kontrol edin
+
 - Dosya boyutunu azaltmayı deneyin
-- Max Depth değerini düşürün
 
-#### **"Memory limit exceeded" Hatası**
-- Daha az dosya seçin
-- Tarayıcı sekmelerini kapatın
+**Analyze Logs:**- Max Depth değerini düşürün
+
+```powershell
+
+# PowerShell log analyzer#### **"Memory limit exceeded" Hatası**
+
+.\scripts\analyze_logs.ps1 -Service all -Download -Summary- Daha az dosya seçin
+
+```- Tarayıcı sekmelerini kapatın
+
 - Array Mode'u "Join" yapın
 
-#### **"No data to export" Uyarısı**
-- En az bir dosya seçili olduğundan emin olun
-- Dosyaların başarıyla işlendiğini kontrol edin
-- JSON formatının geçerli olduğunu doğrulayın
+See [LOG_MANAGEMENT_GUIDE.md](docs/LOG_MANAGEMENT_GUIDE.md) for details.
 
-### 🔄 **Performans Sorunları**
-- **Yavaş işleme**: Batch size'ı artırın
-- **Tarayıcı donması**: Daha küçük dosya grupları kullanın  
-- **Export hatası**: Disk alanınızı kontrol edin
+#### **"No data to export" Uyarısı**
+
+---- En az bir dosya seçili olduğundan emin olun
+
+- Dosyaların başarıyla işlendiğini kontrol edin
+
+## 🛠️ Troubleshooting- JSON formatının geçerli olduğunu doğrulayın
+
+
+
+### Large Files Timeout### 🔄 **Performans Sorunları**
+
+```typescript- **Yavaş işleme**: Batch size'ı artırın
+
+// Reduce batch size- **Tarayıcı donması**: Daha küçük dosya grupları kullanın  
+
+config.batchSize = 50;- **Export hatası**: Disk alanınızı kontrol edin
+
+```
 
 ---
 
-## 🎓 Gelişmiş Kullanım
+### Memory Issues
 
-### 🔧 **Özel Yapılandırmalar**
+```typescript## 🎓 Gelişmiş Kullanım
+
+// Enable aggressive memory management
+
+memoryManager.setAggressiveMode(true);### 🔧 **Özel Yapılandırmalar**
+
+```
 
 #### **Karmaşık JSON Yapıları**
-```json
-{
-  "user": {
-    "personal": {
-      "contact": {
+
+### Debug Mode```json
+
+```javascript{
+
+localStorage.setItem('debug', 'true');  "user": {
+
+// Reload page    "personal": {
+
+```      "contact": {
+
         "emails": ["work@example.com", "personal@example.com"]
-      }
+
+---      }
+
     }
-  }
+
+## 📄 License  }
+
 }
-```
+
+**AGPL v3** - GNU Affero General Public License v3.0```
+
 - **Delimiter**: `_` 
-- **Max Depth**: `15`
-- **Array Mode**: `join`
-- **Sonuç**: `user_personal_contact_emails` → `"work@example.com; personal@example.com"`
+
+- ✅ Free to use, modify, and distribute- **Max Depth**: `15`
+
+- ✅ Must share source code if deployed publicly- **Array Mode**: `join`
+
+- ✅ Must license derivatives under AGPL- **Sonuç**: `user_personal_contact_emails` → `"work@example.com; personal@example.com"`
+
+- ❌ No warranty provided
 
 #### **API Response Yapıları**
-```json
+
+For commercial licensing, contact: support@devtestenv.org```json
+
 {
-  "status": "success",
+
+---  "status": "success",
+
   "data": [
-    {"id": 1, "name": "Item 1"},
+
+## 🤝 Contributing    {"id": 1, "name": "Item 1"},
+
     {"id": 2, "name": "Item 2"}
-  ],
-  "meta": {
-    "total": 2,
-    "page": 1
-  }
+
+1. Fork the repository  ],
+
+2. Create feature branch (`git checkout -b feature/amazing`)  "meta": {
+
+3. Commit changes (`git commit -m 'Add feature'`)    "total": 2,
+
+4. Push branch (`git push origin feature/amazing`)    "page": 1
+
+5. Open Pull Request  }
+
 }
-```
+
+---```
+
 - **Delimiter**: `.`
-- **Array Mode**: `explode`
+
+## 🎉 Changelog- **Array Mode**: `explode`
+
 - **Sonuç**: `data.0.id`, `data.0.name`, `data.1.id`, `data.1.name`
 
-### 📈 **Toplu İşlem Stratejileri**
+### v2.0.0 (November 2025)
 
-#### **50+ Dosya İçin**
-1. "Single Sheet Export" kullanın
-2. İlerleme çubuğunu takip edin
-3. Batch dosyaları otomatik oluşur
-4. Her batch için ayrı Excel dosyası
+- ✨ Bulk Processing Mode (90+ files)### 📈 **Toplu İşlem Stratejileri**
+
+- ✨ Folder upload with structure preservation
+
+- ✨ Enterprise logging system#### **50+ Dosya İçin**
+
+- ✨ Memory management optimization1. "Single Sheet Export" kullanın
+
+- ✨ PowerShell log analyzer2. İlerleme çubuğunu takip edin
+
+- 🐛 Fixed: Column mixing with system fields3. Batch dosyaları otomatik oluşur
+
+- 🐛 Fixed: Excel export debug data leak4. Her batch için ayrı Excel dosyası
+
+- ⚡ Improved: Large dataset performance
 
 #### **Klasör Yapısını Korumak İçin**
-1. "Upload Folders" ile yükleyin
-2. "Folder-Based Export" seçin
-3. Her klasör ayrı Excel olur
-4. Orijinal yapı korunur
+
+### v1.0.0 (October 2025)1. "Upload Folders" ile yükleyin
+
+- 🎉 Initial release2. "Folder-Based Export" seçin
+
+- ✅ JSON to Excel conversion3. Her klasör ayrı Excel olur
+
+- ✅ PWA support4. Orijinal yapı korunur
+
+- ✅ Responsive design
+
+---
 
 ---
 
 ## 🔄 Güncellemeler
 
+## 📞 Support
+
 ### **v0.1.0 - İlk Sürüm**
-- ✅ Temel JSON to Excel dönüştürme
-- ✅ Toplu dosya işleme
+
+- **Issues**: [GitHub Issues](https://github.com/Xtra01/json-to-excel-converter/issues)- ✅ Temel JSON to Excel dönüştürme
+
+- **Email**: support@devtestenv.org- ✅ Toplu dosya işleme
+
 - ✅ Klasör yapısı desteği
-- ✅ Gelişmiş yapılandırma seçenekleri
+
+---- ✅ Gelişmiş yapılandırma seçenekleri
+
 - ✅ CSV export desteği
-- ✅ Performans optimizasyonları
+
+## 🙏 Credits- ✅ Performans optimizasyonları
+
 - ✅ Hata yakalama ve raporlama
 
----
+- **Next.js** - React framework
 
-## 🤝 Katkıda Bulunma
+- **XLSX** - Excel generation---
 
-Bu proje açık kaynak kodlu ve geliştirmeye açıktır. Katkıda bulunmak isterseniz:
+- **Tailwind CSS** - Styling
 
-1. Repository'yi fork edin
+- **TypeScript** - Type safety## 🤝 Katkıda Bulunma
+
+
+
+---Bu proje açık kaynak kodlu ve geliştirmeye açıktır. Katkıda bulunmak isterseniz:
+
+
+
+**Live Demo:** [https://json2excel.devtestenv.org](https://json2excel.devtestenv.org)1. Repository'yi fork edin
+
 2. Yeni branch oluşturun (`git checkout -b feature/amazing-feature`)
-3. Değişikliklerinizi commit edin (`git commit -m 'Add amazing feature'`)
+
+**Made with ❤️ by Xtra01**3. Değişikliklerinizi commit edin (`git commit -m 'Add amazing feature'`)
+
 4. Branch'inizi push edin (`git push origin feature/amazing-feature`)
 5. Pull Request oluşturun
 

@@ -150,7 +150,12 @@ export default function JsonToExcelApp() {
     const allKeys = new Set<string>();
     selectedFiles.forEach(file => {
       file.rows.forEach(row => {
-        Object.keys(row).forEach(key => allKeys.add(key));
+        Object.keys(row).forEach(key => {
+          // Filter out internal/system fields that start with underscore
+          if (!key.startsWith('__') && !key.startsWith('_source_') && !key.startsWith('_')) {
+            allKeys.add(key);
+          }
+        });
       });
     });
     setColumns(Array.from(allKeys));
@@ -580,8 +585,13 @@ export default function JsonToExcelApp() {
         });
 
         if (allFolderRows.length > 0) {
-          // Add tracking columns to the column list for proper export
-          const enhancedColumns = [...new Set([...columns, '__source_file', '__folder'])];
+          // Only include user's original JSON columns
+          const userColumns = columns.filter(col => 
+            !col.startsWith('__') && 
+            !col.startsWith('_source_') && 
+            !col.startsWith('_')
+          );
+          const enhancedColumns = [...userColumns, '__source_file', '__folder'];
           const combinedWs = XLSX.utils.json_to_sheet(allFolderRows, { header: enhancedColumns });
           XLSX.utils.book_append_sheet(wb, combinedWs, "Combined");
           usedSheetNames.add("Combined");
@@ -700,8 +710,17 @@ export default function JsonToExcelApp() {
       }));
 
       if (allRows.length > 0) {
-        // Add tracking columns to the column list for proper export
-        const enhancedColumns = [...new Set([...columns, '__source_file', '__source_folder', '__original_path'])];
+        // Only include user's original JSON columns (no internal fields)
+        const userColumns = columns.filter(col => 
+          !col.startsWith('__') && 
+          !col.startsWith('_source_') && 
+          !col.startsWith('_')
+        );
+        
+        // Add source tracking columns separately
+        const trackingColumns = ['__source_file', '__source_folder', '__original_path'];
+        const enhancedColumns = [...userColumns, ...trackingColumns];
+        
         const ws = XLSX.utils.json_to_sheet(allRows, { header: enhancedColumns });
         const wb = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, ws, "All_Data");
@@ -739,6 +758,13 @@ export default function JsonToExcelApp() {
     try {
       logUserAction('CSV export started', { mode: processingMode });
 
+      // Filter out internal columns
+      const userColumns = columns.filter(col => 
+        !col.startsWith('__') && 
+        !col.startsWith('_source_') && 
+        !col.startsWith('_')
+      );
+
       if (processingMode === "bulk" && selectedFiles.length > 0) {
         const allRows: Row[] = [];
         selectedFiles.forEach(file => {
@@ -751,9 +777,9 @@ export default function JsonToExcelApp() {
           }
         });
         
-        await downloadCSV(allRows, "bulk_export.csv", columns);
+        await downloadCSV(allRows, "bulk_export.csv", [...userColumns, '_source_file', '_source_folder']);
       } else if (orderedRows.length > 0) {
-        await downloadCSV(orderedRows, "export.csv", columns);
+        await downloadCSV(orderedRows, "export.csv", userColumns);
       }
       
       tracker.complete();

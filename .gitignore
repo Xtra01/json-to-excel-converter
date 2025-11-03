@@ -47,9 +47,11 @@ Thumbs.db
 # Logs
 logs/
 *.log
+*.log.*
 
 # Backups
 backups/
+archive/
 
 # Uploads (user data)
 uploads/
